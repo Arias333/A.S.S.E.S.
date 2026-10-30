@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A.S.E.S. // ARCHIVO DE ESPECIES SUSTITUTAS</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+    body {
+      background-color: transparent !important;
+      font-family: 'Courier New', Courier, monospace;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      padding-bottom: 120px;
+      margin: 0;
+    }
+    #bg-video-ae {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: cover !important;
+      z-index: -10 !important; 
+      pointer-events: none !important;
+      opacity: 0.35;
+    }
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background: #ffffff;
+      border-bottom: 2px solid #111111;
+      z-index: 100;
+    }
+    .top-brand-btn {
+      background: #111111;
+      color: #f2efe9;
+      border: 2px solid #111111;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #ff0044;
+      transition: all 0.1s;
+    }
+    .top-brand-btn:hover {
+      background: #ff0044;
+      color: #ffffff;
+      border-color: #ff0044;
+      box-shadow: 3px 3px 0px #111111;
+    }
+    .game-controls {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .btn-reset {
+      background: #ff0044;
+      color: #ffffff;
+      border: 2px solid #111111;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 0.75rem;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #111111;
+      transition: transform 0.1s;
+    }
+    .btn-reset:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px #111111;
+    }
+    .main-container {
+      padding-top: 120px !important;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 20px;
+      padding-right: 20px;
+      position: relative;
+      z-index: 10;
+    }
+    .manifesto-banner {
+      border: 2px solid #111111;
+      background: #ffffff;
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      box-shadow: 5px 5px 0px #111111;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .manifesto-text {
+      font-size: 0.85rem;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+    .counter-tag {
+      background: #111111;
+      color: #00ff66;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      border: 1px solid #111111;
+    }
+
+    /* CONTENEDOR Y CONTROLES DEL CARRUSEL DINÁMICO */
+    .carousel-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 40px;
+    }
+    .carousel-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      background: #111;
+      color: #fff;
+      padding: 8px 12px;
+      border: 2px solid #111;
+    }
+    .carousel-title-tag {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #00ff66;
+    }
+    .carousel-nav-btns {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-nav-carousel {
+      background: #ffffff;
+      color: #111111;
+      border: 2px solid #111111;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #ff0044;
+      transition: all 0.1s;
+    }
+    .btn-nav-carousel:hover {
+      background: #ff0044;
+      color: #ffffff;
+      box-shadow: 2px 2px 0px #ffffff;
+    }
+    .btn-nav-carousel:active {
+      transform: translate(1px, 1px);
+      box-shadow: 0px 0px 0px #111;
+    }
+
+    /* TIRA DE TARJETAS CON SCROLL HORIZONTAL DINÁMICO */
+    .specimen-carousel-track {
+      display: flex;
+      gap: 25px;
+      overflow-x: auto;
+      padding: 10px 5px 25px 5px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+    }
+    .specimen-carousel-track:active {
+      cursor: grabbing;
+    }
+    .specimen-carousel-track::-webkit-scrollbar {
+      height: 10px;
+    }
+    .specimen-carousel-track::-webkit-scrollbar-track {
+      background: #ffffff;
+      border: 2px solid #111;
+    }
+    .specimen-carousel-track::-webkit-scrollbar-thumb {
+      background: #ff0044;
+      border: 1px solid #111;
+    }
+
+    .specimen-card {
+      background: #ffffff;
+      border: 2px solid #111111;
+      box-shadow: 6px 6px 0px #111111;
+      padding: 15px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 290px;
+      max-width: 290px;
+      flex-shrink: 0;
+    }
+    .specimen-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 8px 8px 0px #ff0044;
+    }
+    .specimen-card:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px #111111;
+    }
+    .specimen-card.human-card {
+      border: 2px solid #ff0044;
+      background: #111111;
+      color: #ffffff;
+      box-shadow: 6px 6px 0px #ff0044;
+    }
+    .specimen-card.human-card .image-wrapper {
+      background: #000000;
+      border-color: #ff0044;
+    }
+    .specimen-card.human-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 8px 8px 0px #ffffff;
+    }
+    .specimen-card.extinct {
+      background: #1a1a1a;
+      color: #666666;
+      border-color: #ff0044;
+      box-shadow: 6px 6px 0px #ff0044;
+      cursor: not-allowed;
+    }
+    .specimen-card.extinct img {
+      filter: grayscale(100%) contrast(200%) opacity(0.2);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #111111;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .specimen-card.human-card .card-header {
+      border-bottom-color: #ff0044;
+    }
+    .image-wrapper {
+      width: 100%;
+      height: 160px;
+      border: 1px solid #111111;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .image-wrapper img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+    .specimen-bio {
+      font-size: 0.72rem;
+      line-height: 1.35;
+      margin-bottom: 12px;
+      border-left: 2px solid #111;
+      padding-left: 8px;
+      background: #f9f9f9;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    .specimen-card.human-card .specimen-bio {
+      border-left-color: #ff0044;
+      background: #111;
+      color: #ccc;
+    }
+    .scientific-name {
+      font-style: italic;
+      color: #555;
+      font-size: 0.75rem;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .specimen-card.human-card .scientific-name {
+      color: #ff0044;
+    }
+    .hp-container {
+      margin-bottom: 10px;
+    }
+    .hp-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    .hp-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #e0e0e0;
+      border: 1px solid #111111;
+    }
+    .hp-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: #00bb44;
+      transition: width 0.15s ease, background 0.2s;
+    }
+    .card-footer {
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px dashed #111;
+      padding-top: 8px;
+      margin-top: auto;
+    }
+    .specimen-card.human-card .card-footer {
+      border-top-color: #ff0044;
+    }
+    .click-prompt {
+      font-size: 0.65rem;
+      color: #ff0044;
+      text-transform: uppercase;
+      animation: blink 1.2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .glitch-effect {
+      animation: glitch-anim 0.15s ease-in-out;
+    }
+    @keyframes glitch-anim {
+      0% { transform: translate(0); }
+      20% { transform: translate(-4px, 3px); filter: invert(100%); }
+      40% { transform: translate(4px, -3px); }
+      60% { transform: translate(-2px, -2px); }
+      100% { transform: translate(0); }
+    }
+    .fusion-section {
+      border: 3px solid #111111;
+      background: #ffffff;
+      padding: 25px;
+      margin-top: 40px;
+      margin-bottom: 50px;
+      box-shadow: 8px 8px 0px #111111;
+      position: relative;
+    }
+    .fusion-title {
+      font-size: 1.1rem;
+      font-weight: 900;
+      background: #111111;
+      color: #00ff66;
+      display: inline-block;
+      padding: 5px 12px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+    .fusion-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+      margin-top: 15px;
+    }
+    .brutal-select {
+      background: #f2efe9;
+      border: 2px solid #111111;
+      padding: 10px;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 0.85rem;
+      cursor: pointer;
+      outline: none;
+      box-shadow: 3px 3px 0px #111111;
+    }
+    .btn-fuse {
+      background: #00ff66;
+      color: #111111;
+      border: 2px solid #111111;
+      padding: 12px 20px;
+      font-family: inherit;
+      font-weight: 900;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #111111;
+      transition: all 0.1s;
+    }
+    .btn-fuse:hover {
+      background: #ff0044;
+      color: #ffffff;
+      box-shadow: 6px 6px 0px #111111;
+    }
+    .btn-fuse:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #111111;
+    }
+    .chimera-display {
+      margin-top: 20px;
+      padding: 15px;
+      border: 2px dashed #111111;
+      background: #fafafa;
+      display: none;
+      align-items: center;
+      gap: 20px;
+    }
+    .chimera-display.active {
+      display: flex;
+      animation: glitch-anim 0.3s ease;
+    }
+    .chimera-info {
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+    .water-tank {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0%;
+      background: rgba(255, 0, 68, 0.25);
+      border-top: 3px solid #ff0044;
+      pointer-events: none;
+      z-index: 1;
+      transition: height 0.3s ease-out;
+    }
+    .water-counter {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111111;
+      color: #f2efe9;
+      padding: 12px 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border-top: 2px solid #ff0044;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .water-counter span {
+      color: #ff0044;
+    }
+    .marquee-container {
+      position: fixed;
+      top: 45px;
+      left: 0;
+      width: 100%;
+      background: #ff0044;
+      color: #ffffff;
+      border-bottom: 2px solid #111111;
+      overflow: hidden;
+      white-space: nowrap;
+      z-index: 90;
+      padding: 4px 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.75rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee-anim 30s linear infinite;
+    }
+    .marquee-content span {
+      margin: 0 10px;
+    }
+    @keyframes marquee-anim {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content.brutalist-box {
+      background: #f2efe9;
+      color: #111111;
+      border: 3px solid #111111;
+      box-shadow: 8px 8px 0px #ff0044;
+      width: 90%;
+      max-width: 620px;
+      padding: 20px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #111111;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .modal-close-btn {
+      background: #111111;
+      color: #ffffff;
+      border: none;
+      font-family: monospace;
+      font-weight: bold;
+      padding: 3px 8px;
+      cursor: pointer;
+    }
+    .modal-close-btn:hover {
+      background: #ff0044;
+    }
+    .modal-body h3 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      color: #111111;
+    }
+    .modal-body h4 {
+      margin-bottom: 5px;
+      font-size: 0.95rem;
+      color: #ff0044;
+    }
+    .modal-body p {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .modal-footer {
+      border-top: 1px solid #111111;
+      padding-top: 10px;
+      margin-top: 15px;
+      text-align: right;
+    }
+    .lockout-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(17, 17, 17, 0.95);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+    .lockout-box {
+      background: #f2efe9;
+      color: #111111;
+      border: 4px solid #ff0044;
+      box-shadow: 12px 12px 0px #ff0044;
+      width: 85%;
+      max-width: 650px;
+      padding: 30px;
+      font-family: 'Courier New', Courier, monospace;
+      animation: glitch-anim 0.2s infinite;
+    }
+    .lockout-title {
+      background: #ff0044;
+      color: #ffffff;
+      padding: 10px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      border: 2px solid #111;
+    }
+    .lockout-body p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .lockout-footer {
+      border-top: 2px dashed #111;
+      padding-top: 15px;
+      margin-top: 20px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <!-- AUDIO SFX -->
+  <audio id="sfx-click" src="c:\Users\ceari\Downloads\stevemotion-camera-click-569825.mp3" preload="auto"></audio>
+  <audio id="sfx-synth" src="c:\Users\ceari\Downloads\virtual_vibes-digital-glitch-noise-hd-379465.mp3" preload="auto"></audio>
+  
+  <!-- VIDEO FONDO -->
+  <video autoplay loop muted playsinline id="bg-video-ae">
+    <source src="glitch_fondo.mp4" type="video/mp4">
+  </video>
+
+  <div id="water-tank" class="water-tank"></div>
+
+  <!-- PANTALLA BLOQUEO -->
+  <div id="system-lockout" class="lockout-overlay">
+    <div class="lockout-box">
+      <div class="lockout-title">⚠️ ERROR CRÍTICO // SISTEMA COLAPSADO ⚠️</div>
+      <div class="lockout-body">
+        <p><strong>HAS CONSUMIDO TODOS LOS RECURSOS HÍDRICOS DEL SERVIDOR.</strong></p>
+        <p>Tu negligencia digital ha agotado el suministro de agua. Las especies biológicas han sido completamente erradicadas y sustituidas por archivos sintéticos.</p>
+        <p style="color: #ff0044; margin-top: 15px;">ACCESO BLOQUEADO. LA NAVEGACIÓN HA SIDO SUSPENDIDA PERMANENTEMENTE.</p>
+      </div>
+      <div class="lockout-footer">
+        <span>[ A.S.E.S. // ARCHIVO SINTÉTICO DE ESPECIES SUSTITUTAS ]</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee-container">
+    <div class="marquee-content">
+      <span>[ ARCHIVO SINTÉTICO DE ESPECIES SUSTITUTAS ]</span>
+      <span>///</span>
+      <span>ALERTA: DEGRADACIÓN DE ECOSISTEMAS EN TIEMPO REAL</span>
+      <span>///</span>
+      <span>SISTEMA DE MONITOREO HÍDRICO ACTIVO</span>
+      <span>///</span>
+      <span>IMPACTO ANTROPOGÉNICO DETECTADO</span>
+      <span>///</span>
+      <span>CARLOS EDUARDO // Post-WebArt 2026</span>
+      <span>///</span>
+    </div>
+  </div>
+
+  <header class="top-bar">
+    <button class="top-brand-btn" id="bio-btn">CARLOS EDUARDO // ARCHIVO A.S.E.S.</button>
+    <div class="game-controls">
+      <button class="btn-reset" id="btn-reset-app">[ RECARGAR ARCHIVO (+0.5L) ]</button>
+    </div>
+  </header>
+
+  <div id="bio-modal" class="modal-overlay">
+    <div class="modal-content brutalist-box">
+      <div class="modal-header">
+        <span>[ ARCHIVO CLASIFICADO // EXPEDIENTE DE ARTISTA ]</span>
+        <button id="close-modal-btn" class="modal-close-btn">[X]</button>
+      </div>
+      <div class="modal-body">
+        <h3>CARLOS EDUARDO ARIAS MEDINA</h3>
+        <p><strong>Licenciado en Artes Plásticas y estudiante de la Maestría en Artes Visuales (Universidad de El Salvador).</strong> Mi trabajo explora las intersecciones entre la tecnología, la memoria digital y la crisis ecológica contemporánea.</p>
+        <hr style="border: 1px dashed #111; margin: 15px 0;">
+        <h4>SOBRE A.S.E.S. (Archivo Sintético de Especies Sustitutas)</h4>
+        <p>Proyecto de <strong>WebArt e Interfaz Crítica</strong> que examina el impacto de la infraestructura digital y el consumo hídrico de los servidores frente a la extinción real de la fauna en el Mundo.</p>
+      </div>
+      <div class="modal-footer">
+        <span style="font-size: 0.75rem; font-weight: bold;">ESTADO: REGISTRO ACTIVO // UES 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="main-container">
+    <div class="manifesto-banner">
+      <div class="manifesto-text">
+        HAZ CLIC SOBRE LAS ESPECIES PARA SIMULAR EL IMPACTO DIGITAL.<br>
+        EL HUMANO ACTÚA COMO CATALIZADOR INDESTRUCTIBLE. (DESLIZA EL CARRUSEL O USA LOS BOTONES)
+      </div>
+      <div class="counter-tag" id="active-species-count">ESPECIES VIVAS: 9/9</div>
+    </div>
+
+    <!-- CARRUSEL INTERACTIVO -->
+    <div class="carousel-wrapper">
+      <div class="carousel-header-bar">
+        <span class="carousel-title-tag">[ TIRA DE REGISTROS // DESLIZA LATERALMENTE ]</span>
+        <div class="carousel-nav-btns">
+          <button class="btn-nav-carousel" id="btn-prev-slide">[◄ ANTERIOR]</button>
+          <button class="btn-nav-carousel" id="btn-next-slide">[SIGUIENTE ►]</button>
+        </div>
+      </div>
+
+      <div class="specimen-carousel-track" id="carousel-track">
+        <!-- HUMANO -->
+        <div class="specimen-card human-card" id="human-card">
+          <div class="card-header">
+            <span style="color: #ff0044;">#000 // DEPREDADOR</span>
+            <span style="color: #ff0044;">EL ARMA</span>
+          </div>
+          <div class="image-wrapper">
+            <img src="https://revistajaraysedal.es/wp-content/uploads/2024/11/cazador-1.jpg" alt="Cazador" width="300" height="200">
+          </div>
+          <div class="specimen-bio">
+            <span class="scientific-name">Homo sapiens</span>
+            Agente antrópico y catalizador del colapso ambiental. Su infraestructura y actividad extractivista aceleran la extinción masiva de la biodiversidad nativa.
+          </div>
+          <div class="hp-container">
+            <div class="hp-label">
+              <span>IMPACTO AMBIENTAL</span>
+              <span style="color: #ff0044;">∞ / MÁXIMO</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill" style="width: 100%; background: #ff0044;"></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span style="font-weight: 900;">HOMO SAPIENS</span>
+            <span class="click-prompt" style="color: #ff0044;">[ EJECUTAR ]</span>
+          </div>
+        </div>
+
+        <!-- ANIMAL 01 -->
+        <div class="specimen-card animal-card" data-hp="100">
+          <div class="card-header">
+            <span>#001</span>
+            <span class="status-text">VIVO // RIESGO</span>
+          </div>
+          <div class="image-wrapper">
+            <img src="https://inaturalist-open-data.s3.amazonaws.com/photos/264089139/medium.jpeg" alt="Mono Araña">
+          </div>
+          <div class="specimen-bio">
+            <span class="scientific-name">Ateles geoffroyi</span>
+            Primate arbóreo nativo de Mesoamérica. Clave como dispersor masivo de semillas, garantizando la regeneración y salud de los bosques tropicales salvadoreños.
+          </div>
+          <div class="hp-container">
+            <div class="hp-label">
+              <span>RESISTENCIA ANALÓGICA</span>
+              <span class="hp-value">100%</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill"></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>MONO ARAÑA</span>
+            <span class="click-prompt">[ IMPACTAR ]</span>
+          </div>
+        </div>
+
+        <!-- ANIMAL 02 -->
+        <div class="specimen-card animal-card" data-hp="100">
+          <div class="card-header">
+            <span>#002</span>
+            <span class="status-text">VIVO // RIESGO</span>
+          </div>
+          <div class="image-wrapper">
+            <img src="https://www.barrameda.com.ar/wp-content/uploads/2019/12/lora-nuca-amarilla.jpg" alt="Lora nuca amarilla">
+          </div>
+          <div class="specimen-bio">
+            <span class="scientific-name">Amazona auropalliata</span>
+            Loro neotropical de plumaje verde brillante. Actúa como polinizador y dispersor secundario de frutos silvestres; vital para la biodiversidad regional.
+          </div>
+          <div class="hp-container">
+            <div class="hp-label">
+              <span>RESISTENCIA ANALÓGICA</span>
+              <span class="hp-value">100%</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill"></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>LORA NUCA AMARILLA</span>
+            <span class="click-prompt">[ IMPACTAR ]</span>
+          </div>
+        </div>
+
+        <!-- ANIMAL 03 -->
+        <div class="specimen-card animal-card" data-hp="100">
+          <div class="card-header">
+            <span>#003</span>
+            <span class="status-text">VIVO // CRÍTICO</span>
+          </div>
+          <div class="image-wrapper">
+            <img src="https://th.bing.com/th/id/R.39db77984574b5658625926e7c897780?rik=AIijmcX1iMQjmw&pid=ImgRaw&r=0" alt="Tortuga carey">
+          </div>
+          <div class="specimen-bio">
+            <span class="scientific-name">Eretmochelys imbricata</span>
+            Reptil marino de arrecifes de coral. Regula las poblaciones de esponjas marinas, manteniendo el equilibrio ecológico y la salud costera.
+          </div>
+          <div class="hp-container">
+            <div class="hp-label">
+              <span>RESISTENCIA ANALÓGICA</span>
+              <span class="hp-value">100%</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill"></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>TORTUGA CAREY</span>
+            <span class="click-prompt">[ IMPACTAR ]</span>
+          </div>
+        </div>
+
+        <!-- ANIMAL 04 -->
+        <div class="specimen-card animal-card" data-hp="100">
+          <div class="card-header">
+            <span>#004</span>
+            <span class="status-text">VIVO // RIESGO</span>
+          </div>
+          <div class="image-wrapper">
+            <img src="https://tse3.mm.bing.net/th/id/OIP.3YxXllrAbyMcIJqQxcFOLQHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Puma">
+          </div>
+          <div class="specimen-bio">
+            <span class="scientific-name">Puma</span>
+            Depredador tope de los bosques montañosos. Controla las poblaciones de herbívoros y mantiene la estructura trófica equilibrada del territorio.
+          </div>
+          <div class="hp-container">
+            <div class="hp-label">
+              <span>RESISTENCIA ANALÓGICA</span>
+              <span class="hp-value">100%</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill"></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>PUMA</span>
+            <span class="click-prompt">[ IMPACTAR ]</span>
+          </div>
+        </div>
+
+        <!-- ANIMAL 05 -->
+        <div class="specimen-card animal-card" data-hp="100">
+          <div class="card-header">
+            <span>#005</span>
+            <span class="status-text">VIVO // RIESGO</span>
+          </div>
+          <div class="image-wrapper">
+            <img src="https://tse3.mm.bing.net/th/id/OIP.Pd4dTxZ5wvI-CV1FEuyVGwHaEI?r=0&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Ocelote">
+          </div>
+          <div class="specimen-bio">
+            <span class="scientific-name">Leopardus pardalis</span>
+            Felino manchado nocturno. Regula pequeños mamíferos y roedores, previniendo sobrepoblaciones que dañan los cultivos y el equilibrio local.
+          </div>
+          <div class="hp-container">
+            <div class="hp-label">
+              <span>RESISTENCIA ANALÓGICA</span>
+              <span class="hp-value">100%</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill"></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>OCELOTE</span>
+            <span class="click-prompt">[ IMPACTAR ]</span>
+          </div>
+        </div>
+
+        <!-- ANIMAL 06 -->
+        <div class="specimen-card animal-card" data-hp="100">
+          <div class="card-header">
+            <span>#006</span>
+            <span class="status-text">VIVO // ESTABLE</span>
+          </div>
+          <div class="image-wrapper">
+            <img src="https://www.hondurastips.hn/wp-content/uploads/2019/05/98865684-1200x600-1-1140x570.jpg" alt="Cusuco">
+          </div>
+          <div class="specimen-bio">
+            <span class="scientific-name">Dasypus novemcinctus</span>
+            Mamífero acorazado cavador. Su labor de remoción de tierra airea el suelo, controla insectos subterráneos y facilita la filtración de nutrientes.
+          </div>
+          <div class="hp-container">
+            <div class="hp-label">
+              <span>RESISTENCIA ANALÓGICA</span>
+              <span class="hp-value">100%</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill"></div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span>CUSUCO (ARMADILLO)</span>
+            <span class="click-prompt">[ IMPACTAR ]</span>
+          </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN DE VIDEO LOCAL -->
+    <section class="fusion-section" style="margin-bottom: 40px;">
+      <div class="fusion-title">[ CÁMARA 01 // REGISTRO DE CAMPO ]</div>
+      <div style="width: 100%; height: 315px; margin-top: 15px; border: 2px solid #111; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+        <video 
+          id="surveillance-video"
+          src="c:\Users\ceari\Downloads\El Salvador Indomable - Ministerio de Medio Ambiente (1080p).mp4" 
+          width="100%"
+          height="100%"
+          style="object-fit: cover;"
+          autoplay 
+          loop 
+          muted 
+          playsinline>
+          Tu navegador no soporta la reproducción de video nativo.
+        </video>
+      </div>
+      <div style="margin-top: 10px; font-size: 0.75rem; font-weight: bold; display: flex; justify-content: space-between;">
+        <span>UBICACIÓN: EL SALVADOR // ÁREAS PROTEGIDAS</span>
+        <span style="color: #ff0044;" id="video-impact-log">[ ARCHIVO LOCAL DE VIDEO CARGADO ]</span>
+      </div>
+    </section>
+
+    <!-- LABORATORIO DE SÍNTESIS DE QUIMERAS -->
+    <section class="fusion-section">
+      <div class="fusion-title">MÓDULO DE TRANSMUTACIÓN // IA GENERATIVA AMBIENTAL</div>
+      <p style="font-size: 0.8rem; font-weight: bold; line-height: 1.4;">
+        A medida que las especies biológicas colapsan, el servidor intenta reprogramar ADN sintético combinando fragmentos de especies extintas. Generar una Quimera consume alto procesamiento hídrico.
+      </p>
+      <div class="fusion-controls">
+        <select class="brutal-select" id="gene-a">
+          <option value="MONO">ADN A: MONO ARAÑA</option>
+          <option value="TORTUGA">ADN A: TORTUGA CAREY</option>
+          <option value="LORO">ADN A: LORO NUCA AMARILLA</option>
+          <option value="PUMA">ADN A: PUMA</option>
+          <option value="OCELOTE">ADN A: OCELOTE</option>
+          <option value="TOROGOZ">ADN A: TOROGOZ</option>
+        </select>
+        <span style="font-weight: 900;">+</span>
+        <select class="brutal-select" id="gene-b">
+          <option value="SAPIENS">ADN B: HOMO SAPIENS</option>
+          <option value="CYBER">ADN B: RED NEURAL</option>
+          <option value="SYNTH">ADN B: MATERIA GRIS DIGITAL</option>
+        </select>
+        <button class="btn-fuse" id="btn-fuse-genes">[ SINTETIZAR QUIMERA (+1.5L) ]</button>
+      </div>
+      <div class="chimera-display" id="chimera-output">
+        <div style="font-size: 2.5rem; background: #111; padding: 10px; border: 1px solid #00ff66;" id="chimera-icon">👾</div>
+        <div class="chimera-info">
+          <div style="font-weight: 900; color: #ff0044; font-size: 0.9rem;" id="chimera-name">ESPECIE QUIMÉRICA: NULL</div>
+          <div id="chimera-desc">Estado: En espera de desarrollo genético-digital...</div>
+          <div style="color: #ffaa00; font-size: 0.7rem; margin-top: 5px;" id="chimera-status">ESTABILIDAD DEL ALGORITMO: 0%</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="water-counter">
+    <div>GASTO DE SERVIDOR ESTIMADO: <span id="water-used">0.000</span> LITROS DE AGUA</div>
+    <div id="game-status-msg" style="color: #666;">SISTEMA EN MONITOREO</div>
+  </footer>
+
+  <script>
+    let totalLiters = 0;
+    const waterText = document.getElementById('water-used');
+    const waterTank = document.getElementById('water-tank');
+    const statusMsg = document.getElementById('game-status-msg');
+    const btnReset = document.getElementById('btn-reset-app');
+    const humanCard = document.getElementById('human-card');
+    const animalCards = document.querySelectorAll('.animal-card');
+    
+    // AUDIO SFX
+    const sfxClick = document.getElementById('sfx-click');
+    const sfxSynth = document.getElementById('sfx-synth');
+    
+    function reproducirAudio(audioElement) {
+      if (audioElement) {
+        audioElement.currentTime = 0;
+        audioElement.play().catch(e => console.log("Audio bloqueado hasta interacción"));
+      }
+    }
+    
+    // NAVEGACIÓN Y DRAG DEL CARRUSEL
+    const carouselTrack = document.getElementById('carousel-track');
+    const btnPrev = document.getElementById('btn-prev-slide');
+    const btnNext = document.getElementById('btn-next-slide');
+
+    btnPrev.addEventListener('click', () => {
+      reproducirAudio(sfxClick);
+      carouselTrack.scrollBy({ left: -315, behavior: 'smooth' });
+    });
+
+    btnNext.addEventListener('click', () => {
+      reproducirAudio(sfxClick);
+      carouselTrack.scrollBy({ left: 315, behavior: 'smooth' });
+    });
+
+    // ARRASTRE DE CARRUSEL CON MOUSE
+    let isDown = false;
+    let startX, scrollLeft;
+
+    carouselTrack.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - carouselTrack.offsetLeft;
+      scrollLeft = carouselTrack.scrollLeft;
+    });
+    carouselTrack.addEventListener('mouseleave', () => { isDown = false; });
+    carouselTrack.addEventListener('mouseup', () => { isDown = false; });
+    carouselTrack.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - carouselTrack.offsetLeft;
+      const walk = (x - startX) * 2; 
+      carouselTrack.scrollLeft = scrollLeft - walk;
+    });
+
+    // ALERTA SONORA Web Audio API
+    let audioCtx = null;
+    let alarmInterval = null;
+    function dispararAlarmaIncoda() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (alarmInterval) return; 
+      
+      alarmInterval = setInterval(() => {
+        if (!audioCtx) return;
+        try {
+          let osc = audioCtx.createOscillator();
+          let gain = audioCtx.createGain();
+          
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(880, audioCtx.currentTime); 
+          osc.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.3);
+          
+          gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+          
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.3);
+        } catch(e) {
+          console.log(e);
+        }
+      }, 400);
+    }
+    
+    // BIOGRAFÍA MODAL
+    const bioBtn = document.getElementById('bio-btn');
+    const bioModal = document.getElementById('bio-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    
+    bioBtn.addEventListener('click', () => {
+      reproducirAudio(sfxClick);
+      bioModal.style.display = 'flex';
+    });
+    closeModalBtn.addEventListener('click', () => { bioModal.style.display = 'none'; });
+    bioModal.addEventListener('click', (e) => {
+      if (e.target === bioModal) bioModal.style.display = 'none';
+    });
+    
+    window.addEventListener('mousemove', () => {
+      totalLiters += 0.0001;
+      actualizarMedidor();
+    });
+    
+    function aplicarDano(card, cantidad) {
+      let currentHp = parseInt(card.getAttribute('data-hp'));
+      if (currentHp <= 0) return;
+      
+      currentHp -= cantidad;
+      if (currentHp < 0) currentHp = 0;
+      card.setAttribute('data-hp', currentHp);
+      
+      card.classList.add('glitch-effect');
+      setTimeout(() => card.classList.remove('glitch-effect'), 150);
+      
+      const hpFill = card.querySelector('.hp-bar-fill');
+      const hpValue = card.querySelector('.hp-value');
+      const statusText = card.querySelector('.status-text');
+      
+      hpFill.style.width = currentHp + '%';
+      hpValue.textContent = currentHp + '%';
+      
+      if (currentHp > 50) {
+        hpFill.style.background = '#00bb44';
+      } else if (currentHp > 0) {
+        hpFill.style.background = '#ffaa00';
+        statusText.textContent = 'DAÑO SEVERO';
+        statusText.style.color = '#ffaa00';
+      } else {
+        hpFill.style.background = '#ff0044';
+        card.classList.add('extinct');
+        statusText.textContent = 'EXTINTO // SUSTITUIR';
+        statusText.style.color = '#ff0044';
+        card.querySelector('.click-prompt').textContent = '[ COLAPSO ]';
+      }
+    }
+    
+    animalCards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (parseInt(card.getAttribute('data-hp')) > 0) {
+          totalLiters += 0.35;
+          reproducirAudio(sfxClick);
+          aplicarDano(card, 25);
+          actualizarEstado();
+        }
+      });
+    });
+    
+    humanCard.addEventListener('click', () => {
+      totalLiters += 0.75;
+      reproducirAudio(sfxClick);
+      
+      humanCard.classList.add('glitch-effect');
+      setTimeout(() => humanCard.classList.remove('glitch-effect'), 200);
+      
+      animalCards.forEach(card => {
+        aplicarDano(card, 25);
+      });
+      
+      statusMsg.textContent = 'ALERTA: IMPACTO ANTROPOGÉNICO GLOBAL APLICADO';
+      statusMsg.style.color = '#ff0044';
+      actualizarEstado();
+    });
+    
+    btnReset.addEventListener('click', () => {
+      totalLiters += 0.5;
+      reproducirAudio(sfxClick);
+      
+      animalCards.forEach(card => {
+        card.setAttribute('data-hp', '100');
+        card.classList.remove('extinct');
+        
+        const hpFill = card.querySelector('.hp-bar-fill');
+        const hpValue = card.querySelector('.hp-value');
+        const statusText = card.querySelector('.status-text');
+        
+        hpFill.style.width = '100%';
+        hpFill.style.background = '#00bb44';
+        hpValue.textContent = '100%';
+        statusText.textContent = 'VIVO // ESTABLE';
+        statusText.style.color = '#111111';
+        card.querySelector('.click-prompt').textContent = '[ IMPACTAR ]';
+      });
+      
+      statusMsg.textContent = 'SISTEMA REINICIADO // ESPECIES RESTAURADAS';
+      statusMsg.style.color = '#666';
+      actualizarEstado();
+    });
+    
+    const btnFuse = document.getElementById('btn-fuse-genes');
+    const chimeraOutput = document.getElementById('chimera-output');
+    const chimeraName = document.getElementById('chimera-name');
+    const chimeraDesc = document.getElementById('chimera-desc');
+    const chimeraStatus = document.getElementById('chimera-status');
+    const chimeraIcon = document.getElementById('chimera-icon');
+    
+    const icons = ['👾', '🧬', '🤖', '💀', '☣️', '⚡'];
+    const chimeraDatabase = {
+      "MONO_SAPIENS": {
+        name: "Ateles sapiens hybridus (Primate Antrópico Sintético)",
+        desc: "Organismo quimérico diseñado para entornos urbanos fragmentados. Posee capacidad prehensil optimizada para manipulación de interfaces digitales, pero carece de instinto de dispersión forestal, acelerando la desertificación biológica."
+      },
+      "TORTUGA_SAPIENS": {
+        name: "Eretmochelys cibernetica (Testudine Híbrido de Red)",
+        desc: "Sustituto acorazado con caparazón de fibra óptica. Incapaz de procesar calcio orgánico, absorbe microplásticos y datos corruptos de los servidores costeros en lugar de regular arrecifes."
+      },
+      "LORO_SAPIENS": {
+        name: "Amazona loquax digitalis (Psittacidae Sintético)",
+        desc: "Entidad aviar programada para repetir alertas de emergencia ambiental de forma indefinida. Sus cuerdas vocales emiten frecuencias que interfieren con la comunicación de la fauna real restante."
+      },
+      "PUMA_SAPIENS": {
+        name: "Puma anthroposyntheticus (Apex Predator Algorítmico)",
+        desc: "Depredador sintético con sensores de rastreo satelital integrados. Sustituye al puma real controlando roedores urbanos, pero su metabolismo depende estrictamente de energía eléctrica constante."
+      },
+      "OCELOTE_SAPIENS": {
+        name: "Leopardus terminalis (Felino de Interfaz)",
+        desc: "Variante menor adaptada para operar en servidores subterráneos. Camuflaje con patrón de código binario; cumple funciones de control de plagas digitales pero es estéril en la naturaleza."
+      },
+      "TOROGOZ_SAPIENS": {
+        name: "Eumomota virtualis (Avifauna de Servidor)",
+        desc: "Emblema nacional convertido en holograma interactivo. Su canto es una secuencia de tonos sintéticos que simulan la memoria de los bosques perdidos de El Salvador."
+      }
+    };
+    
+    btnFuse.addEventListener('click', () => {
+      totalLiters += 1.50;
+      reproducirAudio(sfxSynth);
+      
+      document.body.classList.add('glitch-effect');
+      setTimeout(() => document.body.classList.remove('glitch-effect'), 250);
+      
+      const geneA = document.getElementById('gene-a').value;
+      const geneB = document.getElementById('gene-b').value;
+      const comboKey = `${geneA}_${geneB}`;
+      
+      const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+      const randomStability = Math.floor(Math.random() * 35) + 10;
+      
+      let specimenInfo = chimeraDatabase[comboKey] || {
+        name: `${geneA}_SYNTH_${geneB} (Entidad Quimérica Experimental)`,
+        desc: "Especie sintética generada por algoritmo de emergencia. Muestra resistencia artificial en entornos de pantalla, pero cero adaptabilidad biológica en el ecosistema real."
+      };
+      
+      chimeraName.textContent = `ESPECIE: ${specimenInfo.name}`;
+      chimeraDesc.textContent = `Ficha Técnica: ${specimenInfo.desc} [Reemplazo artificial activo en servidor].`;
+      chimeraStatus.textContent = `ESTABILIDAD DEL ALGORITMO: ${randomStability}% [MUTACIÓN CRÍTICA]`;
+      chimeraIcon.textContent = randomIcon;
+      
+      chimeraOutput.classList.add('active');
+      statusMsg.textContent = 'ADVERTENCIA: GENERACIÓN DE QUIMERA COMPLETADA. CONSUMO HÍDRICO CRÍTICO.';
+      statusMsg.style.color = '#00ff66';
+      
+      actualizarMedidor();
+    });
+    
+    function actualizarEstado() {
+      let vivas = 0;
+      animalCards.forEach(card => {
+        if (parseInt(card.getAttribute('data-hp')) > 0) vivas++;
+      });
+      
+      const countTag = document.getElementById('active-species-count');
+      countTag.textContent = `ESPECIES VIVAS: ${vivas}/${animalCards.length}`;
+      
+      if (vivas === 0) {
+        countTag.style.background = '#ff0044';
+        countTag.style.color = '#ffffff';
+        statusMsg.textContent = 'CRÍTICO: TODAS LAS ESPECIES HAN SIDO SUSTITUIDAS';
+      } else {
+        countTag.style.background = '#111111';
+        countTag.style.color = '#00ff66';
+      }
+      actualizarMedidor();
+    }
+    
+    function actualizarMedidor() {
+      if (waterText && waterTank) {
+        waterText.textContent = totalLiters.toFixed(3);
+        let heightPercent = Math.min((totalLiters / 12) * 85, 85);
+        waterTank.style.height = heightPercent + '%';
+        
+        if (totalLiters >= 12) {
+          const lockoutScreen = document.getElementById('system-lockout');
+          if (lockoutScreen) {
+            lockoutScreen.style.display = 'flex';
+            dispararAlarmaIncoda();
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>

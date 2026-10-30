@@ -1,0 +1,110 @@
+/* FORZAR VIDEO DE AFTER EFFECTS A SER FONDO COMPLETO */
+#bg-video-ae {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important; /* Estira el video sin deformar */
+  z-index: -1 !important;     /* Lo manda detrás de TODO */
+  pointer-events: none !important; /* Para que los clics pasen al contenido */
+  opacity: 0.25; /* Ajusta la transparencia (0.10 a 0.30 según qué tan oscuro sea) */
+}
+
+/* Asegurar que las tarjetas y la interfaz floten encima del video */
+.top-bar, 
+.main-container, 
+.water-counter {
+  position: relative;
+  z-index: 10;
+}
+/* ESTILO DEL BOTÓN EN LA BARRA SUPERIOR */
+.top-brand-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+.top-brand-btn:hover {
+  color: #ff0044; /* O el color de acento que uses */
+  text-decoration: underline;
+}
+
+/* FONDO OSCURO TRASLÚCIDO PARA EL MODAL */
+.modal-overlay {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 1000; /* Asegura que quede por encima de todo */
+  justify-content: center;
+  align-items: center;
+}
+
+/* CAJA DE LA VENTANA MODAL (ESTILO BRUTALISTA) */
+.modal-content.brutalist-box {
+  background: #f2efe9;
+  color: #111111;
+  border: 3px solid #111111;
+  box-shadow: 6px 6px 0px #111111;
+  width: 90%;
+  max-width: 600px;
+  padding: 20px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #111111;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.modal-close-btn {
+  background: #111111;
+  color: #fff;
+  border: none;
+  font-family: monospace;
+  font-weight: bold;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.modal-close-btn:hover {
+  background: #ff0044;
+}
+
+.modal-body h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+.modal-body h4 {
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.modal-body p {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.modal-footer {
+  border-top: 1px solid #111111;
+  padding-top: 10px;
+  margin-top: 15px;
+  text-align: right;
+}
